@@ -16,6 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.baidu.mapapi.bikenavi.BikeNavigateHelper;
+import com.baidu.mapapi.bikenavi.adapter.IBEngineInitListener;
+import com.baidu.mapapi.bikenavi.adapter.IBRoutePlanListener;
+import com.baidu.mapapi.bikenavi.model.BikeRoutePlanError;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
@@ -44,6 +48,7 @@ import com.baidu.mapapi.walknavi.adapter.IWRoutePlanListener;
 import com.baidu.mapapi.walknavi.model.WalkRoutePlanError;
 import com.baidu.mapapi.walknavi.params.WalkNaviLaunchParam;
 import com.baidu.mapapi.walknavi.params.WalkRouteNodeInfo;
+import com.baidu.platform.comjni.jninative.tts.WNaviTTSPlayer;
 import com.havefun.bhwsandroidstudy.R;
 
 import java.util.ArrayList;
@@ -252,7 +257,7 @@ public class BaiduMapActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btnStart) {
+        if (v.getId() == R.id.btnLine) {
             PlanNode stNode = PlanNode.withLocation(new LatLng(31.222008,121.4817));
             PlanNode enNode = PlanNode.withLocation(new LatLng(31.2032025932295,121.4850275789));
             //PlanNode stNode = PlanNode.withCityNameAndPlaceName("深圳","龙华地铁站");
@@ -262,26 +267,47 @@ public class BaiduMapActivity extends AppCompatActivity implements View.OnClickL
                     .to(enNode).city("上海"));*/
             routePlanSearch.walkingSearch(new WalkingRoutePlanOption().from(stNode).to(enNode));
         } else if (v.getId() == R.id.btnDriver) {
-            WalkNavigateHelper.getInstance().routePlanWithParams(walkNaviLaunchParam, new IWRoutePlanListener() {
-                @Override
-                public void onRoutePlanStart() {
-                    //开始算路的回调
-                }
+            Log.d(TAG, "startWalkNavi");
+            try {
+                WalkNavigateHelper.getInstance().initNaviEngine(this, new IWEngineInitListener() {
+                    @Override
+                    public void engineInitSuccess() {
+                        Log.d(TAG, "WalkNavi engineInitSuccess");
+                        WalkNavigateHelper.getInstance().routePlanWithRouteNode(walkNaviLaunchParam, new IWRoutePlanListener() {
+                            @Override
+                            public void onRoutePlanStart() {
+                                Log.d(TAG, "WalkNavi onRoutePlanStart");
+                            }
 
-                @Override
-                public void onRoutePlanSuccess() {
-                    //算路成功
-                    //跳转至诱导页面
-                    Intent intent = new Intent(BaiduMapActivity.this, WNaviGuideActivity.class);
-                    startActivity(intent);
-                }
+                            @Override
+                            public void onRoutePlanSuccess() {
 
-                @Override
-                public void onRoutePlanFail(WalkRoutePlanError walkRoutePlanError) {
+                                Log.d(TAG, "onRoutePlanSuccess");
 
-                }
-            });
+                                Intent intent = new Intent();
+                                intent.setClass(BaiduMapActivity.this, WNaviGuideActivity.class);
+                                startActivity(intent);
 
+                            }
+
+                            @Override
+                            public void onRoutePlanFail(WalkRoutePlanError error) {
+                                Log.d(TAG, "WalkNavi onRoutePlanFail");
+                            }
+
+                        });
+                    }
+
+                    @Override
+                    public void engineInitFail() {
+                        Log.d(TAG, "WalkNavi engineInitFail");
+                        WalkNavigateHelper.getInstance().unInitNaviEngine();
+                    }
+                });
+            } catch (Exception e) {
+                Log.d(TAG, "startBikeNavi Exception");
+                e.printStackTrace();
+            }
         }
 
         //routePlanSearch.walkingSearch(new WalkingRoutePlanOption().from(stNode).to(enNode));
