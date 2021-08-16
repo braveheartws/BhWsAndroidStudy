@@ -95,6 +95,7 @@ public class DemoGuideActivity extends AppCompatActivity {
                     @Override
                     public void onNaviBackClick() {
                         Log.e(TAG, "onNaviBackClick");
+                        finish();
                     }
 
                     @Override
@@ -157,7 +158,7 @@ public class DemoGuideActivity extends AppCompatActivity {
 
                     @Override
                     public void onPlayError(int code, String message) {
-                        Log.e("BNSDKDemo", "ttsCallback.onPlayError");
+                        Log.e("BNSDKDemo", "ttsCallback.onPlayError" + message);
                     }
                 }
         );

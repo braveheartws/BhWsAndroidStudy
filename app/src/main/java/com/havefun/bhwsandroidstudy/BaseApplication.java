@@ -94,8 +94,8 @@ public class BaseApplication extends Application {
                 .sdcardRootPath(getSdcardDir())
                 .appFolderName(APP_FOLDER_NAME)
                 .appId("com.havefun.bhwsandroidstudy")
-                .appKey("gT2XSUgoMFysCzwLCUtrIItTUdclThsf")
-                .secretKey("MEokc3O8y95Lh9fOLX7lrxY1jD9OkWFf")
+                .appKey("SUxwuqZkCrGqDdtimNp1awzR")
+                .secretKey("wleUBru8OyWsb4PYQwWqcoZdRiYr4a60")
                 .build();
         BaiduNaviManagerFactory.getTTSManager().initTTS(config);
     }
