@@ -1,6 +1,7 @@
 package com.havefun.bhwsandroidstudy.speech_recog;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -46,8 +47,11 @@ public class SpeechRecognitionActivity extends AppCompatActivity implements View
             switch (msg.what) {
                 case IStatus
                         .STATUS_FINISHED:
-                    Toast.makeText(SpeechRecognitionActivity.this, "识别结果:   +" + msg.obj, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "handleMessage: 完整结果 msg: " + msg.obj);
                     break;
+                    case IStatus.STATUS_SPEAKING:
+                        Log.d(TAG, "handleMessage: 临时结果 msg: " + msg.obj);
+                        break;
                 default:
                     Log.d(TAG, "handleMessage: msg: " + msg.what + " msg: " + msg.obj);
                     break;
@@ -95,6 +99,19 @@ public class SpeechRecognitionActivity extends AppCompatActivity implements View
     private void initView() {
         btnStart = findViewById(R.id.btnStart);
         tvLog = findViewById(R.id.tvLog);
+
+        Button button = findViewById(R.id.btnResolve);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                startActivityForResult(intent, 123);
+            }
+        });
+
     }
 
     private void initListener() {

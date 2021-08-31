@@ -75,6 +75,6 @@ dependencies {
     //ViewModel
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 
-    implementation 'com.android.tools.build:gradle:4.0.0'
+
     
 }

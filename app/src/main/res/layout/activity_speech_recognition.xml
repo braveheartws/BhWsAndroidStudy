@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
+
     android:layout_height="match_parent">
 
     <Button
@@ -13,7 +14,13 @@
     <TextView
         android:id="@+id/tvLog"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:layout_height="@dimen/navi_dimens_300dp"
         android:nestedScrollingEnabled="true" />
+
+    <Button
+        android:id="@+id/btnResolve"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

@@ -1,10 +1,13 @@
 package com.havefun.bhwsandroidstudy.alphaanim;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +19,7 @@ public class AlphaAnimActivity extends AppCompatActivity {
     private Button btnShow;
     private Button btnHide;
     private ImageView imageView;
+    private EditText editText;
     private AlphaAnimation machineBgAnim;
 
     @Override
@@ -27,22 +31,21 @@ public class AlphaAnimActivity extends AppCompatActivity {
 
         btnShow = findViewById(R.id.btnShow);
         btnHide = findViewById(R.id.btnHide);
+        editText = findViewById(R.id.editText);
 
         initAnim();
 
         btnShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageView.setVisibility(View.VISIBLE);
-                imageView.startAnimation(machineBgAnim);
+                hideSoftKeyboard(AlphaAnimActivity.this);
             }
         });
 
         btnHide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageView.setVisibility(View.GONE);
-                imageView.clearAnimation();
+                editText.clearFocus();
             }
         });
 
@@ -55,5 +58,11 @@ public class AlphaAnimActivity extends AppCompatActivity {
         //不透明 -》 透明 -》 不透明 的方式
         machineBgAnim.setRepeatMode(Animation.REVERSE);
         machineBgAnim.setDuration(1000);
+    }
+
+    public void hideSoftKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager)activity.getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
     }
 }
